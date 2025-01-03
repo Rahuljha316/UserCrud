@@ -1,10 +1,15 @@
 const express = require('express')
+require('dotenv').config()
+
+const bodyParser = require('body-parser')
 
 const app = express();
-app.get('/', (req,res) => {
+app.use(bodyParser.json())
+app.get('/', (req, res) => {
     res.send("hello")
 })
-const PORT = 3000;
+
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`server is running at ${PORT}`)
 });
