@@ -59,7 +59,7 @@ const createUser = async (req, res) => {
 }
 const updateUser = async (req, res) => {
     try {
-        // validateSignUpData(req)
+        validateSignUpData(req)
         const { id } = req.params;
 
         let { permalink, userName, userPassword, userEmail, enabled } = req.body
@@ -102,9 +102,16 @@ const updateUserFields = (req, res) => {
         })
     }
 }
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
     try {
+        const { id } = req.params;
 
+        const user = await User.findOne({ where: { userId: id } });
+        if (!user) throw new Error('User not found');
+
+        await User.destroy({ where: { userId: id } });
+
+        res.status(200).json({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(400).json({
             error: error.message
