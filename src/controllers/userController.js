@@ -59,17 +59,34 @@ const createUser = async (req, res) => {
 }
 const updateUser = async (req, res) => {
     try {
-        validateSignUpData(req)
+        // validateSignUpData(req)
+        const { id } = req.params;
 
         let { permalink, userName, userPassword, userEmail, enabled } = req.body
+        const user = await User.findOne({ where: { userId: id } });
+        if (!user) {
+            throw new Error("User not found");
+        }
+        const userEmailExists = await User.findOne({ where: { userEmail: userEmail } })
+        if (userEmailExists && userEmailExists.userId !== id) {
+            throw new Error("Email already exists")
 
-        const newUser = await User.update({
-            permalink, userName, userEmail, userPassword, enabled
-        }, { where: { userEmail: userEmail } });
+        }
+        const permalinkExists = await User.findOne({ where: { permalink: permalink } });
+        if (permalinkExists && permalinkExists.userId !== id) {
+            throw new Error("Permalink already exists");
+        }
+        const hashedPassword = userPassword ? await bcrypt.hash(userPassword, 10) : user.userPassword;
+
+        await User.update(
+            { permalink, userName, userEmail, userPassword: hashedPassword, enabled },
+            { where: { userId: id } }
+        );
+
         res.status(200).json({
-            message: 'User Updated SuccessFully',
-            data: newUser
-        })
+            message: 'User Updated Successfully',
+            data: { id, permalink, userName, userEmail, enabled }
+        });
     } catch (error) {
         res.status(400).json({
             error: error.message
