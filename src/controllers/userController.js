@@ -3,19 +3,62 @@ const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const { validateSignUpData } = require('../utils/validation')
 
-const getUsers = (req, res) => {
-    const transaction = sequelize.transaction()
-    try {
+const getUsers = async (req, res) => {
 
+    try {
+        const { limit = 10, offset = 0, filter, search, sortKey = 'createdAt', sortOrder = 'ASC' } = req.query;
+
+        const where = {};
+        if (filter) {
+            const filters = JSON.parse(filter);
+            Object.assign(where, filters);
+        }
+        if (search) {
+            where[Op.or] = [
+                { userName: { [Op.like]: `%${search}%` } },
+                { userEmail: { [Op.like]: `%${search}%` } },
+                { permalink: { [Op.like]: `%${search}%` } }
+            ];
+        }
+        const users = await User.findAndCountAll({
+            where,
+            limit: parseInt(limit),
+            offset: parseInt(offset),
+            order: [[sortKey, sortOrder]],
+        });
+        res.status(200).json({
+            message: 'Users fetched successfully',
+            data: users.rows,
+            meta: {
+                total: users.count,
+                limit: parseInt(limit),
+                offset: parseInt(offset),
+            },
+        });
     } catch (error) {
-        transaction.rollback()
+
         res.status(400).json({
             error: error.message
         })
     }
 }
-const getUser = (req, res) => {
+const getUser = async (req, res) => {
     try {
+        try {
+            const { id } = req.params;
+
+            const user = await User.findOne({ where: { userId: id } });
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            res.status(200).json({
+                message: 'User fetched successfully',
+                data: user,
+            });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
 
     } catch (error) {
         res.status(400).json({
