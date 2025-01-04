@@ -1,13 +1,10 @@
 const express = require('express')
 require('dotenv').config()
-
-const bodyParser = require('body-parser')
+const UserRoutes = require('./routes/userRoutes')
 
 const app = express();
-app.use(bodyParser.json())
-app.get('/', (req, res) => {
-    res.send("hello")
-})
+app.use(express.json())
+app.use('/api/users', UserRoutes)
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
