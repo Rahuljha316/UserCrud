@@ -1,4 +1,5 @@
 const sequelize = require('../database')
+const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const { validateSignUpData } = require('../utils/validation')
 
@@ -27,17 +28,29 @@ const createUser = async (req, res) => {
 
     try {
         validateSignUpData(req)
-        let { permaLink, userName, userPassword, userEmail, enabled } = req.body
+        let { permalink, userName, userPassword, userEmail, enabled } = req.body
 
+        const user = await User.findOne({ where: { userEmail: userEmail } })
+        if (user) {
+            throw new Error("Email already exists")
+
+        }
+        const permalinkExists = await User.findOne({ where: { permalink: permalink } });
+        if (permalinkExists) {
+            throw new Error("Permalink already exists");
+        }
+
+        const hashedPassword = await bcrypt.hash(userPassword, 10)
         const newUser = await User.create({
-            permaLink, userName, userEmail, userPassword, enabled
+            permalink, userName, userEmail, userPassword: hashedPassword, enabled
         });
-        res.status(200).json({
+        res.status(201).json({
             message: 'User Created SuccessFully',
             data: newUser
         })
 
     } catch (error) {
+        console.log(error)
 
         res.status(400).json({
             error: error.message
@@ -47,12 +60,12 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         validateSignUpData(req)
-        
-        let { permaLink, userName, userPassword, userEmail, enabled } = req.body
+
+        let { permalink, userName, userPassword, userEmail, enabled } = req.body
 
         const newUser = await User.update({
-            permaLink, userName, userEmail, userPassword, enabled
-        },{ where: { userEmail: userEmail } });
+            permalink, userName, userEmail, userPassword, enabled
+        }, { where: { userEmail: userEmail } });
         res.status(200).json({
             message: 'User Updated SuccessFully',
             data: newUser
