@@ -44,9 +44,18 @@ const createUser = async (req, res) => {
         })
     }
 }
-const updateUser = (req, res) => {
+const updateUser = async (req, res) => {
     try {
+        validateSignUpData(req)
+        let { permaLink, userName, userPassword, userEmail, enabled } = req.body
 
+        const newUser = await User.update({
+            permaLink, userName, userEmail, userPassword, enabled
+        },{ where: { userEmail: userEmail } });
+        res.status(200).json({
+            message: 'User Updated SuccessFully',
+            data: newUser
+        })
     } catch (error) {
         res.status(400).json({
             error: error.message
