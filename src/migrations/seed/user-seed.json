@@ -1,0 +1,43 @@
+[
+    {
+      "permalink": "alice-smith",
+      "userName": "Alice Smith",
+      "userEmail": "alice.smith@example.com",
+      "userPassword": "hashedpassword1",
+      "enabled": true,
+      "deleted": false
+    },
+    {
+      "permalink": "bob-johnson",
+      "userName": "Bob Johnson",
+      "userEmail": "bob.johnson@example.com",
+      "userPassword": "hashedpassword2",
+      "enabled": true,
+      "deleted": false
+    },
+    {
+      "permalink": "charlie-brown",
+      "userName": "Charlie Brown",
+      "userEmail": "charlie.brown@example.com",
+      "userPassword": "hashedpassword3",
+      "enabled": true,
+      "deleted": false
+    },
+    {
+      "permalink": "david-williams",
+      "userName": "David Williams",
+      "userEmail": "david.williams@example.com",
+      "userPassword": "hashedpassword4",
+      "enabled": true,
+      "deleted": false
+    },
+    {
+      "permalink": "emma-jones",
+      "userName": "Emma Jones",
+      "userEmail": "emma.jones@example.com",
+      "userPassword": "hashedpassword5",
+      "enabled": true,
+      "deleted": false
+    }
+  ]
+  

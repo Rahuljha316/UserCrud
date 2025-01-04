@@ -47,6 +47,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         validateSignUpData(req)
+        
         let { permaLink, userName, userPassword, userEmail, enabled } = req.body
 
         const newUser = await User.update({

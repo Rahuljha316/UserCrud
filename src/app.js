@@ -2,13 +2,14 @@ const express = require('express')
 require('dotenv').config()
 const UserRoutes = require('./routes/userRoutes');
 const sequelize = require('./database');
+const User = require('./models/user')
 const PORT = process.env.PORT || 4000;
 
 const app = express();
 app.use(express.json())
 app.use('/api/users', UserRoutes)
 
-sequelize.authenticate()
+sequelize.sync()
     .then(() => {
         console.log('Database connected...');
         app.listen(PORT, () => {

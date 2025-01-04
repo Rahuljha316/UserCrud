@@ -33,6 +33,14 @@ const User = sequelize.define('User', {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
-}, { timestamps : true});
+    createdAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    }
+}, { timestamps: true });
 
 module.exports = User;
