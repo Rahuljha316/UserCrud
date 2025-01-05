@@ -10,9 +10,9 @@ const validateSignUpData = (req) => {
         throw new Error('Enter a valid email')
     }
 
-    if (!userPassword || !validator.isStrongPassword(userPassword)) {
-        throw new Error('Enter a strong password (min 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character)')
-    }
+    // if (!userPassword || !validator.isStrongPassword(userPassword)) {
+    //     throw new Error('Enter a strong password (min 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character)')
+    // }
 
     if (permalink && !validator.isURL(permalink)) {
         throw new Error('Enter a valid permaLink URL')

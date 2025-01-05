@@ -1,13 +1,19 @@
 const sequelize = require('../database')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
+const { Op } = require("sequelize");
 const { validateSignUpData } = require('../utils/validation')
 
 const getUsers = async (req, res) => {
 
     try {
+        console.log(req.query)
         const { limit = 10, offset = 0, filter, search, sortKey = 'createdAt', sortOrder = 'ASC' } = req.query;
-
+        const allowedSortKeys = ['userId', 'permalink', 'userName', 'userEmail', 'enabled', 'createdAt', 'updatedAt'];
+        if (!allowedSortKeys.includes(sortKey)) {
+            throw new Error(`Invalid sort key: ${sortKey}`);
+        }
+        // console.log(search)
         const where = {};
         if (filter) {
             const filters = JSON.parse(filter);
@@ -17,15 +23,17 @@ const getUsers = async (req, res) => {
             where[Op.or] = [
                 { userName: { [Op.like]: `%${search}%` } },
                 { userEmail: { [Op.like]: `%${search}%` } },
-                { permalink: { [Op.like]: `%${search}%` } }
+                { permalink: { [Op.like]: `%${search}%` } },
             ];
         }
+        console.log(where, search, sortOrder, 'search and where')
         const users = await User.findAndCountAll({
             where,
             limit: parseInt(limit),
             offset: parseInt(offset),
             order: [[sortKey, sortOrder]],
         });
+        // console.log(users)
         res.status(200).json({
             message: 'Users fetched successfully',
             data: users.rows,
@@ -111,12 +119,13 @@ const updateUser = async (req, res) => {
             throw new Error("User not found");
         }
         const userEmailExists = await User.findOne({ where: { userEmail: userEmail } })
-        if (userEmailExists && userEmailExists.userId !== id) {
+        console.log(userEmailExists.userId, id, 'id')
+        if (userEmailExists && userEmailExists.userId != id) {
             throw new Error("Email already exists")
 
         }
         const permalinkExists = await User.findOne({ where: { permalink: permalink } });
-        if (permalinkExists && permalinkExists.userId !== id) {
+        if (permalinkExists && permalinkExists.userId != id) {
             throw new Error("Permalink already exists");
         }
         const hashedPassword = userPassword ? await bcrypt.hash(userPassword, 10) : user.userPassword;
@@ -148,7 +157,7 @@ const updateUserFields = (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
-
+        console.log('delete')
         const user = await User.findOne({ where: { userId: id } });
         if (!user) throw new Error('User not found');
 
