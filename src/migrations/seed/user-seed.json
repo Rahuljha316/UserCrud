@@ -1,6 +1,6 @@
 [
     {
-      "permalink": "alice-smith",
+      "permalink": "https://alice-smith.com",
       "userName": "Alice Smith",
       "userEmail": "alice.smith@example.com",
       "userPassword": "hashedpassword1",
@@ -8,7 +8,7 @@
       "deleted": false
     },
     {
-      "permalink": "bob-johnson",
+      "permalink": "https://bobjohnson.com",
       "userName": "Bob Johnson",
       "userEmail": "bob.johnson@example.com",
       "userPassword": "hashedpassword2",
@@ -16,7 +16,7 @@
       "deleted": false
     },
     {
-      "permalink": "charlie-brown",
+      "permalink": "https://charlibronw.com",
       "userName": "Charlie Brown",
       "userEmail": "charlie.brown@example.com",
       "userPassword": "hashedpassword3",
@@ -24,7 +24,7 @@
       "deleted": false
     },
     {
-      "permalink": "david-williams",
+      "permalink": "https://davidwilliams.com",
       "userName": "David Williams",
       "userEmail": "david.williams@example.com",
       "userPassword": "hashedpassword4",
@@ -32,7 +32,7 @@
       "deleted": false
     },
     {
-      "permalink": "emma-jones",
+      "permalink": "https://emmastone.com",
       "userName": "Emma Jones",
       "userEmail": "emma.jones@example.com",
       "userPassword": "hashedpassword5",
